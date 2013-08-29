@@ -3,7 +3,7 @@ Increments version numbers in version.json *and* generates a funny-ish codename 
 Version data is kept in *version.json*, in the current directory where increment_version is being run.
 The version.json file is generated automatically, if it does not exist in the current directory.
 
-Sample file looks like this:
+Sample version.json file looks like this:
 
 ```json
 {
