@@ -19,6 +19,15 @@ increment_version
 ```
 0.0.2 'Trimmer Polishes'
 
+version.json is overwritten and the resulting sample version.json looks like this:
+
+```json
+{
+	"Number": "0.0.2",
+	"Codename": "Trimmer Polishes"
+}
+```
+
 Install
 =======
 ```
