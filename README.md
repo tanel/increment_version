@@ -7,7 +7,10 @@ Sample version.json file looks like this:
 
 ```json
 {
-	"Number": "0.0.1",
+	"Full": "0.0.1",
+	"Major": 0,
+	"Minor": 0,
+	"Dot": 1,
 	"Codename": "Muddy Sponge"
 }
 ```
@@ -23,7 +26,10 @@ version.json is overwritten and the resulting sample version.json looks like thi
 
 ```json
 {
-	"Number": "0.0.2",
+	"Full": "0.0.2",
+	"Major": 0,
+	"Minor": 0,
+	"Dot": 1,
 	"Codename": "Trimmer Polishes"
 }
 ```
