@@ -11,10 +11,10 @@ import (
 )
 
 type version struct {
-	Full string `json:"full"`
-	Major int `json:"major"`
-	Minor int `json:"minor"`
-	Dot int `json:"dot"`
+	Full     string `json:"full"`
+	Major    int    `json:"major"`
+	Minor    int    `json:"minor"`
+	Dot      int    `json:"dot"`
 	Codename string `json:"codename"`
 }
 
@@ -32,17 +32,14 @@ func main() {
 	var v version
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
-			v.Full = "0.0.0"
-			v.Major = 0
-			v.Minor = 0
-			v.Dot = 0
+			v.setVersion(0, 0, 0)
 		} else {
 			fatal(err)
 		}
 	} else {
 		fatal(json.Unmarshal(b, &v))
 	}
-	fatal(v.increment())
+	v.increment()
 	fmt.Println(v)
 
 	b, err = json.MarshalIndent(v, "", "\t")
@@ -50,11 +47,37 @@ func main() {
 	fatal(ioutil.WriteFile(filename, b, 0644))
 }
 
-func (v *version) increment() error {
-	v.Dot += 1
-	v.Full = fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Dot)
+func (v *version) increment() {
+	major := v.Major
+	minor := v.Minor
+	dot := v.Dot
+	if dot == 99 {
+		if minor == 99 {
+			major += 1
+			minor = 0
+			dot = 0
+		} else {
+			minor += 1
+			dot = 0
+		}
+	} else {
+		dot += 1
+	}
+	v.setVersion(major, minor, dot)
 	v.Codename = randomWord(adjectives) + " " + randomWord(nouns)
-	return nil
+}
+
+func newVersion(major, minor, dot int) version {
+	v := version{}
+	v.setVersion(major, minor, dot)
+	return v
+}
+
+func (v *version) setVersion(major, minor, dot int) {
+	v.Major = major
+	v.Minor = minor
+	v.Dot = dot
+	v.Full = fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Dot)
 }
 
 // http://dictionary-thesaurus.com/wordlists.html
