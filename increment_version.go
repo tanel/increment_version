@@ -6,14 +6,16 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
 
 type version struct {
-	Number   string
-	Codename string
+	Full string `json:"full"`
+	Major int `json:"major"`
+	Minor int `json:"minor"`
+	Dot int `json:"dot"`
+	Codename string `json:"codename"`
 }
 
 func fatal(err error) {
@@ -30,7 +32,10 @@ func main() {
 	var v version
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
-			v.Number = "0.0.0"
+			v.Full = "0.0.0"
+			v.Major = 0
+			v.Minor = 0
+			v.Dot = 0
 		} else {
 			fatal(err)
 		}
@@ -46,18 +51,9 @@ func main() {
 }
 
 func (v *version) increment() error {
-	parts := strings.Split(v.Number, ".")
-	minor := parts[len(parts)-1]
-	n, err := strconv.Atoi(minor)
-	if err != nil {
-		return err
-	}
-	n += 1
-	parts[len(parts)-1] = strconv.Itoa(n)
-	v.Number = strings.Join(parts, ".")
-
+	v.Dot += 1
+	v.Full = fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Dot)
 	v.Codename = randomWord(adjectives) + " " + randomWord(nouns)
-
 	return nil
 }
 
@@ -73,5 +69,5 @@ func randomWord(commalist string) string {
 }
 
 func (v version) String() string {
-	return fmt.Sprintf("%s '%s'", v.Number, v.Codename)
+	return fmt.Sprintf("%s '%s'", v.Full, v.Codename)
 }
